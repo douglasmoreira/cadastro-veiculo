@@ -56,14 +56,14 @@ public class VeiculosController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Car> update(@RequestBody CarDTO carDto, @PathVariable Long id) throws BadRequestException {
-        Car carSaved = serviceCar.update(CarDTO.toCar(carDto, id));
+        Car carSaved = serviceCar.update(carDto, id);
 
         return ResponseEntity.ok(carSaved);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Car> updatePartial(@RequestBody CarDTO carDto, @PathVariable Long id) throws BadRequestException {
-        Car carSaved = serviceCar.update(CarDTO.updateCarFields(carDto));
+        Car carSaved = serviceCar.update(carDto, id);
 
         return ResponseEntity.ok(carSaved);
     }

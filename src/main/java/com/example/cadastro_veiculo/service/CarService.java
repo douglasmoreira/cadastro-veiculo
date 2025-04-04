@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,8 +28,18 @@ public class CarService {
         return carRepository.save(car);
     }
 
-    public Car update(Car car) throws BadRequestException {
-        findByIdOrThrowBadRequestException(car.getId());
+    @Transactional
+    public Car update(CarDTO updateDTO, Long id) throws BadRequestException {
+        Car car = findByIdOrThrowBadRequestException(id);
+
+        if (updateDTO.getVeiculo() != null) car.setVeiculo(updateDTO.getVeiculo());
+        if (updateDTO.getMarca() != null) car.setMarca(updateDTO.getMarca());
+        if (updateDTO.getAno() != null) car.setAno(updateDTO.getAno());
+        if (updateDTO.getDescricao() != null) car.setDescricao(updateDTO.getDescricao());
+        if (updateDTO.getVendido() != null) car.setVendido(updateDTO.getVendido());
+        if (updateDTO.getCriadoEm() != null) car.setCriadoEm(updateDTO.getCriadoEm());
+        if (updateDTO.getAtualizadoEm() != null) car.setAtualizadoEm(updateDTO.getAtualizadoEm());
+
         return carRepository.save(car);
     }
 
