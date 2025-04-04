@@ -29,16 +29,26 @@ public class CarService {
     }
 
     @Transactional
-    public Car update(CarDTO updateDTO, Long id) throws BadRequestException {
+    public Car update(Car updateCar, Long id) throws BadRequestException {
         Car car = findByIdOrThrowBadRequestException(id);
 
-        if (updateDTO.getVeiculo() != null) car.setVeiculo(updateDTO.getVeiculo());
-        if (updateDTO.getMarca() != null) car.setMarca(updateDTO.getMarca());
-        if (updateDTO.getAno() != null) car.setAno(updateDTO.getAno());
-        if (updateDTO.getDescricao() != null) car.setDescricao(updateDTO.getDescricao());
-        if (updateDTO.getVendido() != null) car.setVendido(updateDTO.getVendido());
-        if (updateDTO.getCriadoEm() != null) car.setCriadoEm(updateDTO.getCriadoEm());
-        if (updateDTO.getAtualizadoEm() != null) car.setAtualizadoEm(updateDTO.getAtualizadoEm());
+        if (updateCar.getVeiculo() != null) car.setVeiculo(updateCar.getVeiculo());
+        if (updateCar.getVeiculo() != null) car.setVeiculo(updateCar.getVeiculo());
+        if (updateCar.getMarca() != null) car.setMarca(updateCar.getMarca());
+        if (updateCar.getAno() != null) car.setAno(updateCar.getAno());
+        if (updateCar.getDescricao() != null) car.setDescricao(updateCar.getDescricao());
+        if (updateCar.getVendido() != null) car.setVendido(updateCar.getVendido());
+
+        return carRepository.save(car);
+    }
+
+    @Transactional
+    public Car updatePartial(Car updateCar, Long id) throws BadRequestException {
+        Car car = findByIdOrThrowBadRequestException(id);
+
+        if (updateCar.getAno() != null) car.setAno(updateCar.getAno());
+        if (updateCar.getDescricao() != null) car.setDescricao(updateCar.getDescricao());
+        if (updateCar.getVendido() != null) car.setVendido(updateCar.getVendido());
 
         return carRepository.save(car);
     }

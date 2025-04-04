@@ -29,7 +29,7 @@ public class CarDTO {
                         .marca(car.getMarca())
                         .ano(car.getAno())
                         .descricao(car.getDescricao())
-                        .vendido(car.isVendido())
+                        .vendido(car.getVendido())
                         .criadoEm(car.getCriadoEm())
                         .atualizadoEm(car.getAtualizadoEm())
                         .build())
@@ -40,7 +40,7 @@ public class CarDTO {
         return Car.builder()
                 .veiculo(carDto.getVeiculo())
                 .marca(carDto.getMarca())
-                .ano(Integer.valueOf(carDto.getAno()))
+                .ano(carDto.getAno())
                 .descricao(carDto.getDescricao())
                 .vendido(carDto.getVendido())
                 .build();
@@ -50,7 +50,7 @@ public class CarDTO {
                 .id(id)
                 .veiculo(carDto.getVeiculo())
                 .marca(carDto.getMarca())
-                .ano(Integer.valueOf(carDto.getAno()))
+                .ano(carDto.getAno())
                 .descricao(carDto.getDescricao())
                 .vendido(carDto.getVendido())
                 .build();
@@ -58,7 +58,7 @@ public class CarDTO {
 
     public static Car updateCarFields(CarDTO carDto) {
         return Car.builder()
-                .ano(Integer.valueOf(carDto.getAno()))
+                .ano(carDto.getAno())
                 .descricao(carDto.getDescricao())
                 .vendido(carDto.getVendido())
                 .build();

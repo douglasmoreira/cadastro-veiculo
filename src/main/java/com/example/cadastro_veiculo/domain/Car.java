@@ -17,9 +17,9 @@ public class Car {
     private Long id;
     private String veiculo;
     private String marca;
-    private int ano;
+    private Integer ano;
     private String descricao;
-    private boolean vendido;
+    private Boolean vendido;
     private LocalDateTime criadoEm;
     private LocalDateTime atualizadoEm;
 

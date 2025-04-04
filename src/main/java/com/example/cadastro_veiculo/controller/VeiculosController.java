@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.cadastro_veiculo.controller.dto.CarDTO.toCar;
+import static com.example.cadastro_veiculo.controller.dto.CarDTO.updateCarFields;
 import static com.example.cadastro_veiculo.util.DateUtil.stringToLocalDateTime;
 
 @RestController
@@ -49,21 +51,21 @@ public class VeiculosController {
 
     @PostMapping
     public ResponseEntity<Car> save(@RequestBody CarDTO carDto) {
-        Car carSaved = serviceCar.save(CarDTO.toCar(carDto));
+        Car carSaved = serviceCar.save(toCar(carDto));
 
         return new ResponseEntity<>(carSaved, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Car> update(@RequestBody CarDTO carDto, @PathVariable Long id) throws BadRequestException {
-        Car carSaved = serviceCar.update(carDto, id);
+        Car carSaved = serviceCar.update(toCar(carDto), id);
 
         return ResponseEntity.ok(carSaved);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Car> updatePartial(@RequestBody CarDTO carDto, @PathVariable Long id) throws BadRequestException {
-        Car carSaved = serviceCar.update(carDto, id);
+        Car carSaved = serviceCar.updatePartial(updateCarFields(carDto), id);
 
         return ResponseEntity.ok(carSaved);
     }
