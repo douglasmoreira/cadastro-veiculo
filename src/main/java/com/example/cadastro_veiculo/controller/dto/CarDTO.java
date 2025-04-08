@@ -1,6 +1,7 @@
 package com.example.cadastro_veiculo.controller.dto;
 
 import com.example.cadastro_veiculo.domain.Car;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,13 +13,21 @@ import java.util.stream.Collectors;
 @Builder
 public class CarDTO {
 
+    @Schema(name = "id", description = "Product ID")
     private Long id;
+    @Schema(name = "veiculo", description = "Veiculo", example = "Gol")
     private String veiculo;
+    @Schema(name = "marca", description = "Marca", example = "Volkswagen")
     private String marca;
+    @Schema(name = "ano", description = "Ano", example = "2007", required = true)
     private Integer ano;
+    @Schema(name = "descricao", description = "Descrição", example = "Gol ano 2007 seminovo", required = true)
     private String descricao;
+    @Schema(name = "vendido", description = "Foi Vendido?", example = "true", required = true)
     private Boolean vendido;
+    @Schema(name = "criadoEm", description = "Data criação", example = "2025-04-04T09:49:28.459969975")
     private LocalDateTime criadoEm;
+    @Schema(name = "atualizadoEm", description = "Data atualização", example = "2025-04-04T09:49:28.459969975")
     private LocalDateTime atualizadoEm;
 
     public static List<CarDTO> toCarDto(List<Car> cars) {

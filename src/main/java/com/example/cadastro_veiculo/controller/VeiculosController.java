@@ -2,77 +2,39 @@ package com.example.cadastro_veiculo.controller;
 
 import com.example.cadastro_veiculo.controller.dto.CarDTO;
 import com.example.cadastro_veiculo.domain.Car;
-import com.example.cadastro_veiculo.service.CarService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.coyote.BadRequestException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-import static com.example.cadastro_veiculo.controller.dto.CarDTO.toCar;
-import static com.example.cadastro_veiculo.controller.dto.CarDTO.updateCarFields;
-import static com.example.cadastro_veiculo.util.DateUtil.stringToLocalDateTime;
+@Tag(name = "Cadastro de veiculos")
+public interface VeiculosController {
 
-@RestController
-@RequestMapping("carros")
-public class VeiculosController {
+    @Operation(summary = "Obter veiculo por filtro de veiculo, marca, ano, descrição, vendido, data criação, data atualização")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "busca Veiculo", content =
+                    {@Content(mediaType = "application/json", schema = @Schema(implementation = CarDTO.class))})})
+    ResponseEntity<List<CarDTO>> getByFilter(String veiculo, String marca, Integer ano, String descricao, Boolean vendido, String criadoEm, String atualizadoEm);
 
-    private final CarService serviceCar;
+    @Operation(summary = "Salvar novo carro")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Salvar Veiculo", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = CarDTO.class))})})
+    ResponseEntity<Car> save(CarDTO carDto);
 
-    public VeiculosController(CarService serviceCar) {
-        this.serviceCar = serviceCar;
-    }
+    @Operation(summary = "Atualizar carro pelo id")
+    ResponseEntity<Car> update(CarDTO carDto, Long id) throws BadRequestException;
 
-    @GetMapping
-    public ResponseEntity<List<CarDTO>> getByFilter(
-            @RequestParam(name = "veiculo", required = false) String veiculo,
-            @RequestParam(name = "marca", required = false) String marca,
-            @RequestParam(name = "ano", required = false) Integer ano,
-            @RequestParam(name = "descricao", required = false) String descricao,
-            @RequestParam(name = "vendido", required = false) Boolean vendido,
-            @RequestParam(name = "criadoEm", required = false) String criadoEm,
-            @RequestParam(name = "atualizadoEm", required = false) String atualizadoEm
-    ) {
-        List<Car> cars = serviceCar.getByFilter(
-                CarDTO.builder()
-                        .veiculo(veiculo)
-                        .marca(marca)
-                        .ano(ano)
-                        .descricao(descricao)
-                        .vendido(vendido)
-                        .criadoEm(stringToLocalDateTime(criadoEm))
-                        .atualizadoEm(stringToLocalDateTime(atualizadoEm))
-                        .build());
+    @Operation(summary = "Atualizar parcialmente carro pelo id")
+    ResponseEntity<Car> updatePartial(CarDTO carDto, Long id) throws BadRequestException;
 
-        return ResponseEntity.ok(
-                CarDTO.toCarDto(cars));
-    }
-
-    @PostMapping
-    public ResponseEntity<Car> save(@RequestBody CarDTO carDto) {
-        Car carSaved = serviceCar.save(toCar(carDto));
-
-        return new ResponseEntity<>(carSaved, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Car> update(@RequestBody CarDTO carDto, @PathVariable Long id) throws BadRequestException {
-        Car carSaved = serviceCar.update(toCar(carDto), id);
-
-        return ResponseEntity.ok(carSaved);
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<Car> updatePartial(@RequestBody CarDTO carDto, @PathVariable Long id) throws BadRequestException {
-        Car carSaved = serviceCar.updatePartial(updateCarFields(carDto), id);
-
-        return ResponseEntity.ok(carSaved);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        serviceCar.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    @Operation(summary = "Deletar carro pelo id")
+    ResponseEntity<Void> delete(@PathVariable Long id);
 }
